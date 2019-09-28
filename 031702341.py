@@ -1,118 +1,87 @@
+# -*- coding:utf-8 -*-
 import re
-import cpca
-import numpy
-import pandas
 import json
-
 while 1:
-    str1 = input()
-    if str1 == 'END':
-        break
-    xian = str1.split('!')
-    list1 = xian[1].split(',')
-    shuchuan = re.findall("[0-9]+", str(list1[1]))
-    mark = 0
-    for i in range(len(shuchuan)):
-        if len(shuchuan[i]) == 11:
-            mark = 1
-            break
-    if mark == 1:
-        list2 = list1[1].split(re.findall("[0-9]{11}", str(list1[1]))[0])
-        teph = re.findall("[0-9]{11}", str(list1[1]))[0]
-        adr = list2[0] + list2[1]
-        adr1 = adr[:-1]
+    string=input()
+    if string=='END':
+       break
+    t=string[0]
+    t2=t+'!'
+    string=string.replace(t2,'')#删除！
+    string=string.replace('.','')#删除句号
+    name=(re.findall(r"(.*),",string))[0]#找出姓名
+    string=string.replace(name,'')#剔除姓名
+    number=(re.findall(r"\d{11}",string))[0]#找出电话号码
+    string=string.replace(number,'')#剔除电话号码
+    string=string.replace(',','')#剔除，
+    import cpca
+    list1=[]
+    df=cpca.transform([string])
+    df=df.values
+    province=df[0][0]
+    city=df[0][1]
+    qu=df[0][2]
+    if city=="北京市":
+        province="北京"
+    if city == "天津市":
+        province = "天津"
+    if city=="上海市":
+        province="上海"
+    if city=="重庆市":
+        province="重庆"
+    list1.append(province)
+    list1.append(city)
+    list1.append(qu)
+    leave=df[0][3]
+    first=[""]
+    second=[""]
+    thild=[""]
+    forth=""
+    fifth=""
+    #街道/镇/乡
+    x='街道'
+    y='镇'
+    z='乡'
+    if  leave.find(x)>0:
+        first=(re.findall(r".*街道",leave))#找出街道
+        leave=leave.replace(first[0],"")
+    elif leave.find(y)>0:
+        first = (re.findall(r".*镇", leave))  # 找出镇
+        leave = leave.replace(first[0], "")
+    elif leave.find(y)>0:
+        first = (re.findall(r".*乡", leave))  # 找出乡
+        leave = leave.replace(first[0], "")
+    list1=list1+first
+    list2=list1
+    if(t=='1'):
+        list1.append(leave)
+        print(json.dumps(dict((("姓名", name), ("手机", number), ("地址", list1))), ensure_ascii=False))
     else:
-        teph = "未找到正确号码"
-        adr = list1[1]
-        adr1 = adr[:-1]
-    list3 = adr1.split('.')
-    df = cpca.transform(list3, cut=False)
-    df = df.values
-    pvee = df[0][0].split('省')
-    pve = pvee[0]
-    if pve == '北京市':
-        pve = '北京'
-    elif pve == '天津市':
-        pve = '天津'
-    elif pve == '上海市':
-        pve = '上海'
-    elif pve == '重庆市':
-        pve = '重庆'
-    if adr1.find(pve, 0, len(pve)) == -1:
-        df = cpca.transform(list3)
-        df = df.values
-    pve = df[0][0]
-    if pve == '北京市':
-        pve = '北京'
-    elif pve == '天津市':
-        pve = '天津'
-    elif pve == '上海市':
-        pve = '上海'
-    elif pve == '重庆市':
-        pve = '重庆'
-    sell = df[0][1]
-    cot = df[0][2]
-    de_ad = df[0][3]
-
-    if len(de_ad.split('镇', 1)) > 1:
-        si_ji = de_ad.split('镇', 1)
-        de1 = si_ji[0] + '镇'
-        de2 = si_ji[1]
-    elif len(de_ad.split('乡', 1)) > 1:
-        si_ji = de_ad.split('乡', 1)
-        de1 = si_ji[0] + '乡'
-        de2 = si_ji[1]
-    elif len(de_ad.split('街道', 1)) > 1:
-        si_ji = de_ad.split('街道', 1)
-        de1 = si_ji[0] + '街道'
-        de2 = si_ji[1]
-    elif len(de_ad.split('民族乡', 1)) > 1:
-        si_ji = de_ad.split('民族乡', 1)
-        de1 = si_ji[0] + '民族乡'
-        de2 = si_ji[1]
-    elif len(de_ad.split('苏木', 1)) > 1:
-        si_ji = de_ad.split('苏木', 1)
-        de1 = si_ji[0] + '苏木'
-        de2 = si_ji[1]
-    elif len(de_ad.split('南山区', 1)) > 1:
-        si_ji = de_ad.split('南山区', 1)
-        de1 = si_ji[0] + '南山区'
-        de2 = si_ji[1]
-    else:
-        de1 = ""
-        de2 = de_ad
-
-    if xian[0] == '1':
-        a_list = [pve, sell, cot, de1, de2]
-        dict1 = {"姓名": list1[0], "号码": teph, "地址": a_list}
-        print(json.dumps(dict1, ensure_ascii=False))
-    else:
-        list4 = re.findall("[0-9]+['号', '弄']", de2)
-        escp = re.findall("['街', '路', '道', '胡同', '弄', '巷'][0-9]+['号', '弄']", de2)
-        if len(list4):
-            list5 = de2.split(list4[0])
-            if len(escp):
-                de3 = list5[0]
-                de4 = list4[0]
-                de5 = list5[1]
-            else:
-                escp1 = re.findall("['街', '路', '道', '胡同', '弄', '巷']", de2)
-                list6 = de2.split(escp1[0])
-                de3 = list6[0] + escp1[0]
-                de4 = ""
-                de5 = list6[1]
-        else:
-            escp1 = re.findall("['街', '路', '道', '胡同', '弄', '巷']", de2)
-            if len(escp1):
-                list6 = de2.split(escp1[0])
-                de3 = list6[0] + escp1[0]
-                de4 = ""
-                de5 = list6[1]
-            else:
-                de3 = ""
-                de4 = ""
-                de5 = de2
-
-        a_list = [pve, sell, cot, de1, de3, de4, de5]
-        dict1 = {"姓名": list1[0], "号码": teph, "地址": a_list}
-        print(json.dumps(dict1, ensure_ascii=False))
+        x='街'
+        y='巷'
+        z='路'
+        p='胡同'
+        q='弄'
+        if leave.find(x)>0:
+            second=(re.findall(r".*街",leave))#找出街或大街
+            leave=leave.replace(second[0],"")
+        elif leave.find(y)>0:
+            second = (re.findall(r".*巷", leave))  # 找出巷
+            leave = leave.replace(second[0], "")
+        elif leave.find(z)>0:
+            second = (re.findall(r".*路", leave))  # 找出路
+            leave = leave.replace(second[0], "")
+        elif leave.find(z)>0:
+            second = (re.findall(r".*胡同", leave))  # 找出路
+            leave = leave.replace(second[0], "")
+        elif leave.find(z)>0:
+            second = (re.findall(r".*弄", leave))  # 找出路
+            leave = leave.replace(second[0], "")
+        list2=list2+second
+        x='号'
+        if leave.find(x)>0:
+            thild=(re.findall(r"\d*号",leave))#找出门牌号
+            leave=leave.replace(thild[0],"")
+        list2=list2+[thild[0]]
+        list2.append(leave)
+        print(json.dumps(dict((("姓名", name), ("手机", number),("地址",list2))),ensure_ascii=False) )
