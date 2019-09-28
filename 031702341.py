@@ -6,7 +6,7 @@ import json
 
 while 1:
     str1 = input()
-    if str1 == END
+    if str1 == 'END':
         break
     xian = str1.split('!')
     list1 = xian[1].split(',')
