@@ -38,18 +38,18 @@ while 1:
         pve = '上海'
     elif pve == '重庆市':
         pve = '重庆'
-    if adr1.find(pve, 0, len(pve)) == -1:
-        df = cpca.transform(list3)
-        df = df.values
+    # if adr1.find(pve, 0, len(pve)) == -1:
+    #     df = cpca.transform(list3)
+    #     df = df.values
     pve = df[0][0]
-    if pve == '北京市':
-        pve = '北京'
-    elif pve == '天津市':
-        pve = '天津'
-    elif pve == '上海市':
-        pve = '上海'
-    elif pve == '重庆市':
-        pve = '重庆'
+    # if pve == '北京市':
+    #     pve = '北京'
+    # elif pve == '天津市':
+    #     pve = '天津'
+    # elif pve == '上海市':
+    #     pve = '上海'
+    # elif pve == '重庆市':
+    #     pve = '重庆'
     sell = df[0][1]
     cot = df[0][2]
     de_ad = df[0][3]
@@ -114,5 +114,5 @@ while 1:
                 de5 = de2
 
         a_list = [pve, sell, cot, de1, de3, de4, de5]
-        dict1 = {"姓名": list1[0], "手机": teph, "地址": a_list}
+        dict1 = {"姓名": list1[0], "号码": teph, "地址": a_list}
         print(json.dumps(dict1, ensure_ascii=False))
