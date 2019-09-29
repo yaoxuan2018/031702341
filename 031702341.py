@@ -87,8 +87,8 @@ while 1:
         dict1 = {"姓名": list1[0], "手机": teph, "地址": a_list}
         print(json.dumps(dict1, ensure_ascii=False))
     else:
-        list4 = re.findall("[0-9].*['号', '弄']", de2)
-        escp = re.findall("['街', '路', '道', '胡同', '弄', '巷'][0-9].*['号', '弄']", de2)
+        list4 = re.findall("[0-9]+['号', '弄']", de2)
+        escp = re.findall("['街', '路', '道', '胡同', '弄', '巷'][0-9]+['号', '弄']", de2)
         if len(list4):
             list5 = de2.split(list4[0])
             if len(escp):
