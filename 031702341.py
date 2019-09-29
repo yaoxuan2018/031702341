@@ -84,7 +84,7 @@ while 1:
 
     if xian[0] == '1':
         a_list = [pve, sell, cot, de1, de2]
-        dict1 = {"姓名": list1[0], "号码": teph, "地址": a_list}
+        dict1 = {"姓名": list1[0], "手机": teph, "地址": a_list}
         print(json.dumps(dict1, ensure_ascii=False))
     else:
         list4 = re.findall("[0-9]+['号', '弄']", de2)
