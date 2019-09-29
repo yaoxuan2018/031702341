@@ -94,7 +94,7 @@ while 1:
             if len(escp):
                 de3 = list5[0]
                 de4 = list4[0]
-                de5 = de2.split(de3 + list4[0])
+                de5 = de2.split(de3 + list4[0])[1]
             else:
                 escp1 = re.findall("['街', '路', '道', '胡同', '弄', '巷']", de2)
                 list6 = de2.split(escp1[0])
@@ -107,7 +107,7 @@ while 1:
                 list6 = de2.split(escp1[0])
                 de3 = list6[0] + escp1[0]
                 de4 = ""
-                de5 = de2.split(de3)
+                de5 = de2.split(de3)[1]
             else:
                 de3 = ""
                 de4 = ""
