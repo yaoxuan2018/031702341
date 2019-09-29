@@ -114,5 +114,5 @@ while 1:
                 de5 = de2
 
         a_list = [pve, sell, cot, de1, de3, de4, de5]
-        dict1 = {"姓名": list1[0], "号码": teph, "地址": a_list}
+        dict1 = {"姓名": list1[0], "手机": teph, "地址": a_list}
         print(json.dumps(dict1, ensure_ascii=False))
